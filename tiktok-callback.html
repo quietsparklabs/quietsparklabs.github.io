@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>QuietSpark Labs – TikTok sign-in</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<h1>Finishing TikTok sign-in…</h1>
+<p id="msg">Passing your TikTok sign-in to QuietSpark Uploader on this computer.</p>
+</main>
+<script>
+  // TikTok sends the sign-in back here (it only allows https addresses).
+  // This page forwards it to the n8n workflow running on this same computer.
+  var q = window.location.search;
+  var p = new URLSearchParams(q);
+  var msg = document.getElementById('msg');
+  if (p.get('error')) {
+    msg.textContent = 'TikTok sign-in was cancelled or failed: ' + (p.get('error_description') || p.get('error'));
+  } else if (p.get('code')) {
+    window.location.replace('http://localhost:5678/webhook/tiktok-oauth' + q);
+  } else {
+    msg.textContent = 'Nothing to do here.';
+  }
+</script>
+</body>
+</html>
